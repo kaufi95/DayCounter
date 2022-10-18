@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Button, TextInput, StyleSheet } from 'react-native';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -8,6 +8,8 @@ import { storeCounter } from '../scripts/storage';
 const CreateCounter = ({ navigation }) => {
   let name = '';
   let date = new Date();
+
+  const [mode, setMode] = useState('date');
 
   const setHeader = () => {
     navigation.setOptions({
@@ -28,6 +30,10 @@ const CreateCounter = ({ navigation }) => {
     date = selectedDate;
   };
 
+  const switchMode = () => {
+    mode == 'date' ? setMode('time') : setMode('date');
+  };
+
   return (
     <View style={styles.containerView}>
       <TextInput
@@ -38,7 +44,15 @@ const CreateCounter = ({ navigation }) => {
           setHeader();
         }}
       />
-      <DateTimePicker style={styles.dtp} value={date} display="spinner" mode="date" onChange={onChange} />
+      <DateTimePicker
+        style={styles.dtp}
+        value={date}
+        display="spinner"
+        mode={mode}
+        is24Hour={true}
+        onChange={onChange}
+      />
+      <Button onPress={switchMode} title={mode == 'date' ? 'Switch to time' : 'Switch to date'} />
     </View>
   );
 };
